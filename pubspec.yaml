@@ -1,6 +1,6 @@
 name: deferred_state
 description: Provides a simple method of doing async initialisation in a StatefulWidget
-version: 1.0.0
+version: 1.1.0
 repository: https://github.com/onepub-dev/deferred_state
 
 environment:
