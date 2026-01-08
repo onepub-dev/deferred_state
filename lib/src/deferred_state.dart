@@ -33,8 +33,9 @@ import 'deferred_builder.dart';
 /// /// Items that are to be disposed must go in [initState]
 /// @override
 /// void initState() {
-///     super.initState();
 ///     _weekController = EventController();
+///     // this must be called last.
+///     super.initState();
 /// }
 ///
 /// @override
@@ -70,6 +71,9 @@ abstract class DeferredState<T extends StatefulWidget> extends State<T> {
   /// As soon as you code returns from this method
   /// the state is considered initialised, so use await to ensure
   /// all your initialisation is complete before returning.
+  /// 
+  /// Ensure that in your [initState] that you call [super.initState] at
+  /// the end of the method.
   Future<void> asyncInitState();
 
   Future<void> get initialised => _initialised.future;

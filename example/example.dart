@@ -21,8 +21,9 @@ class _SchedulPageState extends DeferredState<SchedulePage> {
   /// Items that are to be disposed must go in [initState]
   @override
   void initState() {
-    super.initState();
     _nameController = TextEditingController();
+    // this must be called last.
+    super.initState();
   }
 
   /// Items that need to be initialised asychronously
