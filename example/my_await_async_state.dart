@@ -22,7 +22,10 @@ class MyDeferredBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DeferredBuilder(state,
-      waitingBuilder: (context) => const Center(child: Text('waiting')),
-      errorBuilder: (context, error) => Center(child: Text(error.toString())),
+      waitingBuilder:
+          waitingBuilder ?? (context) => const Center(child: Text('waiting')),
+      errorBuilder: errorBuilder ??
+          (context, error) =>
+              const Center(child: Text('Unable to load this view.')),
       builder: builder);
 }

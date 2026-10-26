@@ -26,6 +26,8 @@ class DeferredBuilder extends StatelessWidget {
   Widget build(BuildContext context) => FutureBuilderEx(
       future: state.initialised,
       waitingBuilder: waitingBuilder,
-      errorBuilder: errorBuilder,
+      errorBuilder: errorBuilder ??
+          (context, error) =>
+              const Center(child: Text('Unable to initialise this view.')),
       builder: (context, _) => builder(context));
 }

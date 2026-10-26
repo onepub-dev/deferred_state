@@ -22,6 +22,9 @@ FutureBuilder under the hood).
 ## Custom UI
 Whilst the UI is waiting or if an error occurs, DeferredBuilder provides a default 
 [waitingBuilder] and [errorBuilder] implementation but you can roll your own (see below).
+When initialisation fails, the default error UI shows a generic message. To
+show a useful recovery action, pass an `errorBuilder`; avoid displaying raw
+exception text because it may contain private data.
 
 
 # Sponsored by OnePub
@@ -129,8 +132,8 @@ that are passed to [MyDeferredBuilder].
 /// error and waiting builders without having to
 /// specify them at every call site.
 class MyDeferredBuilder extends StatelessWidget {
-  MyDeferredBuilder(this.state,
-      {required this.builder, this.waitingBuilder, this.errorBuilder});
+  const MyDeferredBuilder(this.state,
+      {required this.builder, this.waitingBuilder, this.errorBuilder, super.key});
   final DeferredState state;
   final WidgetBuilder builder;
 
@@ -140,11 +143,15 @@ class MyDeferredBuilder extends StatelessWidget {
   final WaitingBuilder? waitingBuilder;
   final ErrorBuilder? errorBuilder;
 
+  @override
   Widget build(BuildContext context) => DeferredBuilder(state,
       /// Customise the waiting message here
-      waitingBuilder: (c => Center(child: Text('waiting')), here
+      waitingBuilder: waitingBuilder ??
+          (context) => const Center(child: Text('waiting')),
       /// Customise the error message here.
-      errorBuilder: (context, error) => Center(child: Text(error.toString())),
-      builder: (context) => builder(context));
+      errorBuilder: errorBuilder ??
+          (context, error) =>
+              const Center(child: Text('Unable to load this view.')),
+      builder: builder);
 }
 ```
