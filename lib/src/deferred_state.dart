@@ -64,14 +64,23 @@ abstract class DeferredState<T extends StatefulWidget> extends State<T> {
   void initState() {
     super.initState();
 
-    unawaited(asyncInitState().then<void>(_initialised.complete));
+    // A failed initializer must release DeferredBuilder from its waiting state.
+    // Attach a listener even when no builder is mounted, so the completion
+    // error is not reported as an unhandled zone error.
+    _initialised.future.ignore();
+    unawaited(
+      Future<void>.sync(asyncInitState).then<void>(
+        _initialised.complete,
+        onError: _initialised.completeError,
+      ),
+    );
   }
 
   /// Do any asynchronous intialisation in this method
   /// As soon as you code returns from this method
   /// the state is considered initialised, so use await to ensure
   /// all your initialisation is complete before returning.
-  /// 
+  ///
   /// Ensure that in your [initState] that you call [super.initState] at
   /// the end of the method.
   Future<void> asyncInitState();
